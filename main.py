@@ -15,7 +15,7 @@ vid = cv2.VideoCapture(0)
 
 # hand detector
 detector = HandDetector(maxHands=1)
-classifier = Classifier("models\model2\keras_model.h5" , "models\model3\labels.txt")
+classifier = Classifier("models\model2\keras_model.h5" , "models\model2\labels.txt")
 
   
 while(True):
@@ -40,8 +40,10 @@ while(True):
         aspect_ratio = h / w
         if aspect_ratio > 1:
             new_w = w * (img_crop_shape[0] // h) 
-            img_resize = cv2.resize(img_crop , (new_w , 300))
-
+            try:
+            	img_resize = cv2.resize(img_crop , (new_w , 300))
+            except:
+            	continue
             wGap = (300 - new_w) // 2
 
             image_white[0:img_resize.shape[0] , wGap:new_w+wGap] = img_resize
@@ -51,8 +53,10 @@ while(True):
 
         else:
             new_h = h * (img_crop_shape[1] // w) 
-            img_resize = cv2.resize(img_crop , (300 , new_h))
-
+            try:
+            	img_resize = cv2.resize(img_crop , (300 , new_h))
+            except:
+            	continue
             hGap = (300 - new_h) // 2
 
             image_white[hGap:new_h+hGap , 0:img_resize.shape[1]] = img_resize
