@@ -7,4 +7,4 @@ A simple Image recognition code to detect sign languages
 <br>3. Now you are ready to use the program <br/>
 
 
-
+Tensorflow version 12.2
