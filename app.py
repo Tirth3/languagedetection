@@ -6,7 +6,7 @@ import numpy as np
 
 app = Flask(__name__)
 
-camera = cv2.VideoCapture(0) 
+
 # hand detector
 detector = HandDetector(maxHands=1)
 classifier = Classifier("models\model2\keras_model.h5" , "models\model2\labels.txt")
@@ -16,7 +16,8 @@ labels = ["A" , "B" , "C" , "Yes" , "No"]
 font = cv2.FONT_HERSHEY_SIMPLEX
 
 def gen_frames():
-    while(True):
+    camera = cv2.VideoCapture(0) 
+    while(camera.isOpened()):
       
     # Capture the video frame
     # by frame
@@ -70,27 +71,32 @@ def gen_frames():
         byte_frame = buffer.tobytes()
         yield (b'--frame\r\n'
                     b'Content-Type: image/jpeg\r\n\r\n' + byte_frame + b'\r\n')  # concat frame one by one and show result
-
-        # cv2.imshow('Image', img)
-
-# def gen_frames():  # generate frame by frame from camera
-#     while True:
-#         # Capture frame-by-frame
-#         success, frame = camera.read()  # read the camera frame
-#         if not success:
-#             break
-#         else:
-#             ret, buffer = cv2.imencode('.jpg', frame)
-#             frame = buffer.tobytes()
-#             yield (b'--frame\r\n'
-#                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
-
-
+    camera.release()
+        
 @app.route('/video_feed')
 def video_feed():
     #Video streaming route. Put this in the src attribute of an img tag
     return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
+@app.route('/camera')
+def Camera():
+    return render_template('camera.html')
+
+@app.route('/Learn')
+def Learn():
+    return render_template('learn.html')
+
+@app.route('/Feedback')
+def Feedback():
+    return render_template('feedback.html')
+
+@app.route('/Contact')
+def Contact():
+    return render_template('contact.html')
+
+@app.route('/About')
+def About():
+    return render_template('about.html')
 
 @app.route('/')
 def index():
