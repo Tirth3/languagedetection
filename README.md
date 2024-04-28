@@ -1,0 +1,1 @@
+Flask app for language detection prototype
